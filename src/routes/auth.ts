@@ -3,7 +3,6 @@ import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import dotenv from "dotenv";
 import User from "../models/User";
-
 dotenv.config();
 
 const githubRouter = express.Router();
@@ -14,7 +13,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      callbackURL: "http://localhost:4000/auth/github/callback",
+      callbackURL: "http://localhost:4000/api/auth/github/callback",
     },
     async (
       accessToken: string,
@@ -23,20 +22,19 @@ passport.use(
       done: any
     ) => {
       try {
-        // User 모델 예시
-        const user = await User.findOneAndUpdate(
-          { githubId: profile.id },
-          {
-            githubId: profile.id,
-            username: profile.username,
-            accessToken: accessToken,
-            // refreshToken이 제공되는 경우에만 저장
-            ...(refreshToken && { refreshToken: refreshToken }),
-          },
-          { upsert: true, new: true }
-        );
+        const { id, username, email, displayName, node_id } = profile;
 
-        return done(null, profile);
+        let user = await User.findOne({ githubId: id });
+
+        if (!user) {
+          user = await User.create({
+            githubId: id,
+            username: displayName,
+            accessToken: accessToken,
+          });
+        }
+
+        return done(null, user);
       } catch (error) {
         return done(error as Error);
       }
