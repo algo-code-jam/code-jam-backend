@@ -1,0 +1,61 @@
+tags:
+  - name: Auth
+    description: 인증 관련 API
+
+paths:
+  /api/auth/login:
+    get:
+      tags:
+        - Auth
+      summary: GitHub 로그인 시작
+      description: GitHub OAuth 인증 프로세스를 시작합니다
+      responses:
+        "302":
+          description: GitHub 로그인 페이지로 리다이렉트
+
+  /api/auth/github/callback:
+    get:
+      tags:
+        - Auth
+      summary: GitHub OAuth 콜백 처리
+      description: GitHub OAuth 인증 후 콜백을 처리합니다
+      responses:
+        "200":
+          description: 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "GitHub 로그인 성공"
+                  user:
+                    type: object
+                    properties:
+                      githubId:
+                        type: string
+                      username:
+                        type: string
+                      accessToken:
+                        type: string
+        "302":
+          description: 로그인 실패 시 /login으로 리다이렉트
+
+  /api/auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: 로그아웃
+      description: 사용자 세션을 종료하고 로그아웃합니다
+      responses:
+        "200":
+          description: 로그아웃 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "로그아웃 완료"

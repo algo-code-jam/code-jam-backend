@@ -1,0 +1,13 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: CODE JAM API docs
+  description: CODE JAM API SERVER docs
+  license:
+    name: Jiyeon
+servers:
+  - url: "http://localhost:4000/"
+tags:
+  $ref: "./auth.yaml#/tags"
+paths:
+  $ref: "./auth.yaml#/paths"
