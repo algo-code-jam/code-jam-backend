@@ -8,13 +8,14 @@
     "predev": "npm run api-docs",
     "dev": "nodemon --exec ts-node src/app.ts",
     "watch": "tsc -w",
-    "api-docs": "mkdir -p dist/swagger && swagger-cli bundle src/swagger/openapi.yaml -o dist/swagger/openapi.yaml"
+    "api-docs": "mkdir -p dist/swagger && swagger-cli bundle src/swagger/openapi.yaml -o dist/swagger/openapi.yaml --type yaml"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
@@ -29,6 +30,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.1",
     "@types/node": "^22.10.2",

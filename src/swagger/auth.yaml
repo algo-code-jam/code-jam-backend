@@ -10,6 +10,8 @@ paths:
       summary: GitHub 로그인 시작
       description: GitHub OAuth 인증 프로세스를 시작합니다
       responses:
+        "200":
+          description: 로그인 시작
         "302":
           description: GitHub 로그인 페이지로 리다이렉트
 
@@ -19,6 +21,13 @@ paths:
         - Auth
       summary: GitHub OAuth 콜백 처리
       description: GitHub OAuth 인증 후 콜백을 처리합니다
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+          description: GitHub에서 제공하는 인증 코드
       responses:
         "200":
           description: 로그인 성공

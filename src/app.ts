@@ -4,16 +4,26 @@ import passport from "passport";
 import session from "express-session";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
-
+import cors from "cors";
 import githubRouter from "./routes/auth";
 import connectDB from "./configs/database";
 
-const path = require("path");
-const swaggerSpec = YAML.load(path.join(__dirname, "swagger/openapi.yaml"));
+import path from "path";
+const swaggerSpec = YAML.load(
+  path.join(__dirname, "../dist/swagger/openapi.yaml")
+);
 
 dotenv.config();
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(
   session({
