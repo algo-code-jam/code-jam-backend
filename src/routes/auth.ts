@@ -2,7 +2,7 @@ import express from "express";
 import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import dotenv from "dotenv";
-import User from "../models/User";
+import User, { IUser } from "../models/User";
 dotenv.config();
 
 const githubRouter = express.Router();
@@ -19,24 +19,25 @@ passport.use(
       accessToken: string,
       refreshToken: string,
       profile: any,
-      done: any
+      done: (err: any, user: IUser) => void
     ) => {
       try {
-        const { id, username, email, displayName, node_id } = profile;
+        const { id, displayName, nodeId } = profile;
 
         let user = await User.findOne({ githubId: id });
 
         if (!user) {
           user = await User.create({
             githubId: id,
-            username: displayName,
+            userName: displayName,
+            nodeId: nodeId,
             accessToken: accessToken,
-          });
+          } as IUser);
         }
 
-        return done(null, user);
+        return done(null, user as IUser);
       } catch (error) {
-        return done(error as Error);
+        return done(error as Error, {} as IUser);
       }
     }
   )
