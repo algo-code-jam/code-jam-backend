@@ -25,7 +25,6 @@ passport.use(
         const { id, displayName, nodeId } = profile;
 
         let user = await User.findOne({ githubId: id });
-
         if (!user) {
           user = await User.create({
             githubId: id,
@@ -56,7 +55,10 @@ passport.deserializeUser((user: any, done) => {
 // GitHub 로그인 시작
 githubRouter.get(
   "/login",
-  passport.authenticate("github", { scope: ["user:email"] })
+  passport.authenticate("github", { scope: ["user:email"] }),
+  (req, res) => {
+    res.json({ message: "GitHub 로그인 시작" });
+  }
 );
 
 // GitHub 콜백 처리
